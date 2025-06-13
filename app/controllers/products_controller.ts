@@ -1,5 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Product from '#models/product';
+import Role from '#models/role'
 import { validationData } from "#validators/post";
 
 export default class ProductsController {

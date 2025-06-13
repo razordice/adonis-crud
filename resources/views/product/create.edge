@@ -25,3 +25,12 @@
     </form>
   @endslot
 @end
+@slot('script')
+        <script>
+            var token = localStorage.getItem('token');
+
+            if(!token) {
+                window.location.href = '/login';
+            }
+        </script>
+    @endslot

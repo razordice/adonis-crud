@@ -12,14 +12,15 @@ import { middleware } from './kernel.js';
 import ApiProductsController from '#controllers/api/api_products_controller';
 import ProductsController from '#controllers/products_controller';
 import ApiAuthController from '#controllers/api/api_auth_controller';
+import AuthController from '#controllers/auth_controller';
 
 
 router.group(() => {
     router.resource('products', ProductsController)
-}).use(middleware.csrf())
+}).use([middleware.csrf()])
 
-router.group(() => {
-})
+router.get('/login', [AuthController, 'login'])
+router.get('/register', [AuthController, 'register'])
 
 // Protected routes
 router.group(() => {

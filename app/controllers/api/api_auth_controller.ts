@@ -6,6 +6,7 @@ import { loginValidator, registerValidator } from '#validators/auth'
 export default class ApiAuthController {
     async register({ request, response }: HttpContext) {
         const data = request.all()
+        console.log(data)
         const payload = await registerValidator.validate(data)
         const user = await User.create(payload)
         return response.created(user)
@@ -28,11 +29,16 @@ export default class ApiAuthController {
     //     return token
     // }
 
-    public async login({ request, auth }: HttpContext) {
+    public async login({ request, auth, response }: HttpContext) {
         const data = request.all()
         const payload = await loginValidator.validate(data)
         const user = await User.verifyCredentials(payload.email, payload.password)
-        return await auth.use('jwt').generate(user)
+        const {token} = await auth.use('jwt').generate(user)
+
+        return response.json({
+            role_id: user.role_id,
+            token,
+        })
 
     }
 

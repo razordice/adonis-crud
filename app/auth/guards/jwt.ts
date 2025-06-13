@@ -59,7 +59,11 @@ export class JwtGuard<UserProvider extends JwtUserProviderContract<unknown>>
     async generate(
         user: UserProvider[typeof symbols.PROVIDER_REAL_USER]) {
             const providerUser = await this.#userProvider.createUserForGuard(user)
-            const token = jwt.sign({ userId: providerUser.getId() }, this.#options.secret)
+            const newUser: object = {
+                userId: providerUser.getOriginal().id,
+                role_id: providerUser.getOriginal().role_id
+            }
+            const token = jwt.sign(newUser, this.#options.secret)
 
             return {
                 type: 'bearer',
