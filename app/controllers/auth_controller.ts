@@ -1,42 +1,31 @@
-// import { HttpContext } from '@adonisjs/core/http'
-// import User from '#models/user'
-// import { loginValidator, registerValidator } from '#validators/auth'
-// // import jwt from '@adonisjs/jwt/services/main'
+import type { HttpContext } from '@adonisjs/core/http'
+import Role from '#models/role'
+import User from '#models/user'
 
-// export default class AuthController {
-//     async register({ request, response }: HttpContext) {
-//         const payload = await request.validateUsing(registerValidator)
-//         const user = await User.create(payload)
-//         return response.created(user)
-//     }
+export default class AuthController {
+    async login({ view }: HttpContext) {
+        return view.render('pages/auth/login')
+    }
 
-//     // async login({ request, response }: HttpContext) {
-//     //     const { email, password } = await request.validateUsing(loginValidator)
-//     //     const user = await User.verifyCredentials(email, password)
-//     //     const token = await jwt.generate(user)
-//     //     return response.ok({
-//     //         token,
-//     //         expires_in: '1d',
-//     //         type: 'Bearer',
-//     //     })
-//     // }
+    async register({ view }: HttpContext) {
+        const roles = await Role.all();
+        const data = {
+            roles: roles
+        }
+        
+        return view.render('pages/auth/register', data)
+    }
 
-//     // public async login({ request, auth }: HttpContext) {
-//     //     const { email, password } = request.only(['email', 'password'])
-//     //     const token = await auth.use('jwt').attempt(email, password)
-//     //     return token
-//     // }
+    // async verified({ view, request }: HttpContext) {
+    //     const verifiedToken = request.input('token')
+    //     const user = await User.findByOrFail("verification_token", verifiedToken)
+    //     // update
+    //     user.merge({
+    //         is_verified: true
+    //     });
 
-//     public async login({ request, auth }: HttpContext) {
-//         const data = request.all()
-//         const payload = await loginValidator.validate(data)
-//         const user = await User.verifyCredentials(payload.email, payload.password)
-//         return await auth.use('jwt').generate(user)
+    //     await user.save()
 
-//     }
-
-//     async profile({ auth, response }: HttpContext) {
-//         await auth.authenticate()
-//         return response.ok(auth.user)
-//     }
-// }
+    //     return view.render('pages/auth/verified')
+    // }
+}
